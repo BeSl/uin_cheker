@@ -28,13 +28,10 @@ class CaptchaService(
         // Сохраняем изображение во временный файл
         val imageFile = File("$storagePath/${UUID.randomUUID()}.png")
 
-        imageFile.writeBytes(imageBytes)
         imageFile.writeBytes(blackAndWhiteImageBytes)
 
         // Распознаем текст с помощью Tesseract
         return try {
-//            println("jj")
-//            return ""
             tess.doOCR(imageFile)
         } catch (e: Exception) {
             "ERROR: ${e.message}"
@@ -49,8 +46,7 @@ class CaptchaService(
         val contrastImageBytes = replaceGrayWithWhite(imageBytes)
         val blackAndWhiteImageBytes = convertToBlackAndWhite(contrastImageBytes)
 
-        val imageFile = File("$storagePath-${UUID.randomUUID()}.png")
-        imageFile.writeBytes(imageBytes)
+        val imageFile = File("${storagePath}_grey.png")
 
         imageFile.writeBytes(blackAndWhiteImageBytes)
         return try {

@@ -49,7 +49,8 @@ class ProbPalataService(
 
         imgFile.writeBytes(imgData ?: throw IOException("Empty response"))
 
-        val captchaVal = CaptchaService("$baseFilePath").CaptchaFromFile(imgFile)
+        val captchServ = CaptchaService("$storagePath\\$baseFilePath")
+        val captchaVal = captchServ.CaptchaFromFile(imgFile)
         val formData: MultiValueMap<String, String> = LinkedMultiValueMap<String, String>().apply {
             add("action" , "check")
             add("uin", uin)

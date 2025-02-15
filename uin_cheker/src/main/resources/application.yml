@@ -4,7 +4,3 @@ server:
 captcha:
   storage:
     path: C:/captcha-storage
-
-jwt:
-  secret: your-secret-key
-  expiration: 86400000 # 24 часа
