@@ -1,5 +1,7 @@
 package org.besl.uin_cheker.service
 
+import org.besl.uin_cheker.integration.ProbPalataClient
+import org.besl.uin_cheker.model.RequestUinHistory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -20,27 +22,14 @@ import java.util.*
 class ProbPalataService(
     @Value("\${captcha.storage.path}") private val storagePath: String
 ) {
-    val baseUrl = """https://probpalata.gov.ru"""
-    val url_captcha = """/captcha/"""
-    val url_check = """/check-uin/"""
-    private var cookies: String? = null
 
-    fun getAsyncStatus(uin: String): String{
 
-        val bUrl = """https://probpalata.gov.ru"""
-        val client = WebClient.create("$baseUrl")
-        val resp = client.get()
-        val imgData = client
-            .post()
-            .uri("$url_captcha")
-            .accept(MediaType.IMAGE_PNG)
-            .exchangeToMono { resp ->
-                resp.headers().asHttpHeaders().getFirst("Set-Cookie")
-                    ?.let { cookies = it }
-                resp.bodyToMono<ByteArray>()
-            }
-            .block()
 
+
+    fun getAsyncStatus(uin: String, history: RequestUinHistory): String{
+        val pClient = ProbPalataClient()
+
+        val imgData = pClient.getImgCaptha()
 
         val baseFilePath = generateUniqueString()
         val fileName = "$storagePath\\$baseFilePath.png"
@@ -49,24 +38,12 @@ class ProbPalataService(
 
         imgFile.writeBytes(imgData ?: throw IOException("Empty response"))
 
-        val captchServ = CaptchaService("$storagePath\\$baseFilePath")
-        val captchaVal = captchServ.CaptchaFromFile(imgFile)
-        val formData: MultiValueMap<String, String> = LinkedMultiValueMap<String, String>().apply {
-            add("action" , "check")
-            add("uin", uin)
-            add("code" , captchaVal)
-        }
+        history.captchaPath = fileName
 
-        val rr =  client.post()
-            .uri("$url_check")
-            .header(HttpHeaders.COOKIE, cookies)
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .body(BodyInserters.fromFormData(formData))
-            .retrieve()
-            .bodyToMono<String>()
-            .block()
+        val captchaVal = CaptchaService("$storagePath\\$baseFilePath").CaptchaFromFile(imgFile)
 
-        return rr.toString()
+        history.captchaText = captchaVal
+        return pClient.uinStatus(uin, captchaVal).toString()
     }
 
     fun generateUniqueString(): String {

@@ -1,24 +1,24 @@
 package org.besl.uin_cheker.model
 
-class JewelryCheckResponse (
+class JewelryCheckStatus (
     val mainUin: String,
     val name: String,
-    val description: String?,
-    val composition: String?,
-    val status: String,
-    val totalWeight: Double,
-    val weightUnit: String,
+    val description: String="",
+//    val composition: String="",
+    var status: String="NONE",
+//    val totalWeight: Double=0.0,
+//    val weightUnit: String="",
 
     // Участники цепочки
-    val manufacturer: Manufacturer,
-    val seller: Seller,
-
-    // Комплект изделий
-    val items: List<JewelryItem>,
-
-    // Характеристики
-    val metalInfo: MetalInfo,
-    val inserts: List<InsertInfo> = emptyList()
+//    val manufacturer: Manufacturer?,
+//    val seller: Seller?,
+//
+//    // Комплект изделий
+//    val items: List<JewelryItem>?,
+//
+//    // Характеристики
+//    val metalInfo: MetalInfo?,
+//    val inserts: List<InsertInfo> = emptyList()
     )
 
 data class Manufacturer(
