@@ -31,6 +31,7 @@ dependencies {
 //	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 //	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
+	implementation("org.jsoup:jsoup:1.13.1")
 }
 
 kotlin {

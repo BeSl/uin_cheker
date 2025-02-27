@@ -1,7 +1,8 @@
 package org.besl.uin_cheker.integration
 
+import JewelryCheckResponse
 import org.besl.uin_cheker.main
-import org.besl.uin_cheker.model.JewelryCheckStatus
+import org.besl.uin_cheker.service.JewelryHtmlParser
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.util.LinkedMultiValueMap
@@ -34,7 +35,7 @@ class ProbPalataClient {
             .block()
     }
 
-    fun uinStatus(uin: String, captcha: String): JewelryCheckStatus {
+    fun uinStatus(uin: String, captcha: String): JewelryCheckResponse {
         val formData: MultiValueMap<String, String> = LinkedMultiValueMap<String, String>().apply {
             add("action" , "check")
             add("uin", uin)
@@ -50,12 +51,10 @@ class ProbPalataClient {
             .bodyToMono<String>()
             .block()
 
-        return JewelryCheckStatus(
-            mainUin = uin,
-            name = rr.toString(),
-            description = "TODO()",
-            status = "TODO()",
-        )
+        val parser = JewelryHtmlParser()
+        val response = parser.parse(rr.toString())
+
+        return response
 
     }
 
