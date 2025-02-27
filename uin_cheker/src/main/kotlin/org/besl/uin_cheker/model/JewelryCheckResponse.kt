@@ -1,33 +1,60 @@
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class JewelryCheckResponse(
     // Основная информация
+    @JsonProperty("main_uin")
     val mainUin: String,
+
+    @JsonProperty("name")
     val name: String,
+
+    @JsonProperty("description")
     val description: String?,
+
+    @JsonProperty("composition")
     val composition: String?,
+
+    @JsonProperty("status")
     val status: String,
+
+    @JsonProperty("total_weight")
     val totalWeight: Double,
+
+    @JsonProperty("weight_unit")
     val weightUnit: String,
 
-    // Участники цепочки
+    @JsonProperty("manufacturer")
     val manufacturer: Manufacturer,
+
+    @JsonProperty("seller")
     val seller: Seller,
 
-    // Комплект изделий
+    @JsonProperty("items")
     val items: List<JewelryItem>,
 
-    // Характеристики
+    @JsonProperty("metal_info")
     val metalInfo: MetalInfo,
+
+    @JsonProperty("inserts")
     val inserts: List<InsertInfo> = emptyList()
 )
 
 data class Manufacturer(
+    @JsonProperty("name")
     val name: String,
+
+    @JsonProperty("inn")
     val inn: String
 )
 
 data class Seller(
+    @JsonProperty("name")
     val name: String,
+
+    @JsonProperty("inn")
     val inn: String,
+
+    @JsonProperty("address")
     val address: String
 )
 

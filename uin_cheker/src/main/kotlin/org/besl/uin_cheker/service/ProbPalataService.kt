@@ -43,7 +43,7 @@ class ProbPalataService(
         val captchaVal = CaptchaService("$storagePath\\$baseFilePath").CaptchaFromFile(imgFile)
 
         history.captchaText = captchaVal
-        return pClient.uinStatus(uin, captchaVal).toString()
+        return pClient.uinStatus(uin, captchaVal)
     }
 
     fun generateUniqueString(): String {
