@@ -1,5 +1,7 @@
 package org.besl.uin_cheker.controller
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.besl.uin_cheker.model.RequestUinHistory
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -21,9 +23,13 @@ class UinController (
         val history = RequestUinHistory(requestData = uin,)
         return try {
             val status = probPalataClient.getAsyncStatus(uin, history)
+            val objectMapper = jacksonObjectMapper().apply {
+                setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            }
+            val rs = objectMapper.writeValueAsString(status)
             ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(status)
+                .body(rs)
         } catch (e: Exception) {
             ResponseEntity.internalServerError().body("Error: ${e.message}")
         }

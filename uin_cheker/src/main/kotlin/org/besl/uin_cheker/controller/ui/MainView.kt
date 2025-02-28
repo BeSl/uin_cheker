@@ -1,29 +1,44 @@
 package org.besl.uin_cheker.controller.ui
 
-import com.fasterxml.jackson.core.JsonFactory
-import com.fasterxml.jackson.core.json.JsonWriteFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.vaadin.flow.component.Tag.H1
+import JewelryCheckResponse
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.H1
-import com.vaadin.flow.component.html.Pre
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import org.besl.uin_cheker.model.RequestUinHistory
 import org.besl.uin_cheker.service.ProbPalataService
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.router.Menu;
 
+@PageTitle("Проверить уин")
 @Route("") // Корневой путь
+@Menu(title = "Проверка УИН")
 class MainView(
     private val jewelryService: ProbPalataService
 ) : VerticalLayout() {
 
     private val uinField = TextField("УИН")
-    private val resultArea = Pre().apply { style["whiteSpace"] = "pre-wrap" }
     private val checkButton = Button("Проверить")
+
+    // Компоненты для отображения результата
+    private val statusField = TextField("Статус").apply { isReadOnly = true }
+    private val nameField = TextField("Наименование").apply { isReadOnly = true }
+    private val descriptionField = TextField("Описание").apply { isReadOnly = true }
+
+    private val seller_name = TextField("Наименование").apply { isReadOnly = true }
+    private val seller_inn = TextField("ИНН").apply { isReadOnly = true }
+    private val seller_adress = TextField("Адрес").apply { isReadOnly = true }
+
+
+    private val resultLayout = VerticalLayout().apply {
+        isVisible = false
+        width = "100%"
+        isSpacing = false
+    }
 
     init {
         configureLayout()
@@ -48,9 +63,19 @@ class MainView(
                     setRequired(true)
                 },
                 checkButton,
-                resultArea.apply {
-                    width = "100%"
-                    isVisible = false
+                resultLayout.apply {
+                    add(
+                        createSectionHeader("Результат проверки"),
+                        statusField,
+                        nameField,
+                        descriptionField
+                    )
+                    add(
+                        createSectionHeader("Продавец"),
+                        seller_name,
+                        seller_inn,
+                        seller_adress
+                    )
                 }
             )
         }
@@ -62,12 +87,11 @@ class MainView(
         checkButton.addClickListener {
             if (!uinField.isEmpty) {
                 checkButton.isEnabled = false
-                resultArea.isVisible = false
 
                 try {
                     val history = RequestUinHistory(requestData = uinField.value,)
-                    val json = jewelryService.getAsyncStatus(uinField.value, history)
-                    showResult(json)
+                    val response = jewelryService.getAsyncStatus(uinField.value, history)
+                    showResult(response)
                 } catch (e: Exception) {
                     Notification.show("Ошибка: ${e.message}", 5000, Notification.Position.BOTTOM_CENTER)
                 } finally {
@@ -77,15 +101,36 @@ class MainView(
         }
     }
 
-    private fun showResult(json: String) {
-        resultArea.element.text = json
-        resultArea.isVisible = true
+    private fun showResult(response: JewelryCheckResponse) {
+        statusField.value = response.status ?: "Не указано"
+        nameField.value = response.description ?: "Не указано"
+        descriptionField.value = response.composition ?: "" + response.seller?.name ?: ""
+        seller_inn.value = response.seller.inn?:""
+        seller_name.value = response.seller.name?:""
+        seller_adress.value = response.seller.address?:""
+
+        // Стилизация статуса
+        when(response.status?.lowercase()) {
+            "продано" -> {
+                statusField.addThemeNames()
+
+            }  //.LUMO_ERROR.getVariantName())
+            "в наличии" -> statusField.addThemeNames()
+            else -> statusField.removeThemeNames(
+
+            )
+        }
+
+        resultLayout.isVisible = true
     }
 
-//    private fun String.toPrettyJson(): String {
-//        val mapper = ObjectMapper(JsonFactory().enable(JsonWriteFeature.WRITE_NUMBERS_AS_STRINGS))
-//        val jsonNode = mapper.readTree(this)
-//        return jsonNode.toPrettyString()
-//    }
+    private fun createSectionHeader(text: String): H4 {
+        return H4(text).apply {
+            style["margin-top"] = "1em"
+            style["margin-bottom"] = "0.5em"
+            style["color"] = "var(--lumo-primary-text-color)"
+        }
+    }
 
 }
+
