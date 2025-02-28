@@ -10,8 +10,6 @@ import org.springframework.util.MultiValueMap
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import org.springframework.web.reactive.function.BodyInserters
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 //@Suppress("NAME_SHADOWING")
 class ProbPalataClient {
@@ -37,7 +35,7 @@ class ProbPalataClient {
             .block()
     }
 
-    fun uinStatus(uin: String, captcha: String): String {
+    fun uinStatus(uin: String, captcha: String): JewelryCheckResponse {
         val formData: MultiValueMap<String, String> = LinkedMultiValueMap<String, String>().apply {
             add("action" , "check")
             add("uin", uin)
@@ -56,10 +54,7 @@ class ProbPalataClient {
         val parser = JewelryHtmlParser()
         val response = parser.parse(rr.toString())
 
-        val objectMapper = jacksonObjectMapper().apply {
-            setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        }
-        return objectMapper.writeValueAsString(response)
+        return  response
 
     }
 

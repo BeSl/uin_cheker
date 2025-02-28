@@ -1,5 +1,6 @@
 package org.besl.uin_cheker.service
 
+import JewelryCheckResponse
 import org.besl.uin_cheker.integration.ProbPalataClient
 import org.besl.uin_cheker.model.RequestUinHistory
 import org.springframework.beans.factory.annotation.Value
@@ -26,7 +27,7 @@ class ProbPalataService(
 
 
 
-    fun getAsyncStatus(uin: String, history: RequestUinHistory): String{
+    fun getAsyncStatus(uin: String, history: RequestUinHistory): JewelryCheckResponse{
         val pClient = ProbPalataClient()
 
         val imgData = pClient.getImgCaptha()

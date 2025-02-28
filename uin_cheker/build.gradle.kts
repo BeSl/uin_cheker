@@ -37,6 +37,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 	implementation("org.jsoup:jsoup:1.13.1")
 	implementation("com.vaadin:vaadin-spring-boot-starter")
+//	implementation("org.vaadin.lineawesome")
 }
 
 dependencyManagement {
