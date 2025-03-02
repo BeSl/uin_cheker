@@ -3,6 +3,7 @@ package org.besl.uin_cheker.controller.ui
 import JewelryCheckResponse
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.H1
+import com.vaadin.flow.component.html.H2
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -12,12 +13,48 @@ import com.vaadin.flow.router.Route
 import org.besl.uin_cheker.service.ProbPalataService
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.router.Menu;
-import org.besl.uin_cheker.entity.RequestUinHistory
+import com.vaadin.flow.component.applayout.AppLayout
+import com.vaadin.flow.component.applayout.DrawerToggle
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.Scroller
+import com.vaadin.flow.component.sidenav.SideNav;
+import com.vaadin.flow.component.sidenav.SideNavItem;
+import org.besl.uin_cheker.repository.RequestHistoryRepository
+import com.vaadin.flow.theme.lumo.LumoUtility
 
-@PageTitle("Проверить уин")
-@Route("") // Корневой путь
-@Menu(title = "Проверка УИН")
-class MainView(
+@Route("")
+class MainLayout : AppLayout() {
+    init {
+        val toggle = DrawerToggle()
+
+        val title = H1("Сервис проверки статуса УИН").apply {
+            style
+                .set("font-size", "var(--lumo-font-size-l)")
+                .set("margin", "0")
+        }
+
+        val nav = createSideNav()
+        val scroller = Scroller(nav).apply {
+            addClassName(LumoUtility.Padding.SMALL)
+        }
+
+        addToDrawer(scroller)
+        addToNavbar(toggle, title)
+    }
+    private fun createSideNav(): SideNav  {
+        return SideNav().apply {
+            addItem(
+                SideNavItem("Поиск УИН","/cheker", VaadinIcon.CHECK.create()),
+                SideNavItem("История проверок", "/history", VaadinIcon.FILE_SEARCH.create())
+            )
+        }
+    }
+}
+
+@Route(value = "cheker", layout = MainLayout::class)
+@PageTitle("Поиск УИН")
+class SearchView(
     private val jewelryService: ProbPalataService
 ) : VerticalLayout() {
 
@@ -133,3 +170,31 @@ class MainView(
 
 }
 
+
+
+@Route(value = "history", layout = MainLayout::class)
+@PageTitle("История проверок")
+class HistoryView(
+    private val historyRepo: RequestHistoryRepository
+) : VerticalLayout() {
+
+    init {
+        configureLayout()
+//        setupListeners()
+    }
+    private fun configureLayout() {
+        setSizeFull()
+        justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+        alignItems = FlexComponent.Alignment.CENTER
+        val formLayout = VerticalLayout().apply {
+            width = "50%"
+            addClassName("main-form")
+
+            add(
+                H1("История запросов"),
+            )
+        }
+
+        add(formLayout)
+    }
+}
