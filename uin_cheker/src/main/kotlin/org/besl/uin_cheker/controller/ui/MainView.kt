@@ -9,10 +9,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import org.besl.uin_cheker.model.RequestUinHistory
 import org.besl.uin_cheker.service.ProbPalataService
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.router.Menu;
+import org.besl.uin_cheker.entity.RequestUinHistory
 
 @PageTitle("Проверить уин")
 @Route("") // Корневой путь
@@ -89,8 +89,7 @@ class MainView(
                 checkButton.isEnabled = false
 
                 try {
-                    val history = RequestUinHistory(requestData = uinField.value,)
-                    val response = jewelryService.getAsyncStatus(uinField.value, history)
+                    val response = jewelryService.getAsyncStatus(uinField.value, "WEB")
                     showResult(response)
                 } catch (e: Exception) {
                     Notification.show("Ошибка: ${e.message}", 5000, Notification.Position.BOTTOM_CENTER)

@@ -2,7 +2,7 @@ package org.besl.uin_cheker.controller
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.besl.uin_cheker.model.RequestUinHistory
+import org.besl.uin_cheker.entity.RequestUinHistory
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.besl.uin_cheker.service.*
@@ -20,9 +20,8 @@ class UinController (
     fun InfoUinStatus(
         @PathVariable uin: String
     ): ResponseEntity<String> {
-        val history = RequestUinHistory(requestData = uin,)
         return try {
-            val status = probPalataClient.getAsyncStatus(uin, history)
+            val status = probPalataClient.getAsyncStatus(uin, "REST")
             val objectMapper = jacksonObjectMapper().apply {
                 setSerializationInclusion(JsonInclude.Include.NON_NULL)
             }
