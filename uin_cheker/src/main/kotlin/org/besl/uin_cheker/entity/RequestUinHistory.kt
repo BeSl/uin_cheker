@@ -1,6 +1,7 @@
 package org.besl.uin_cheker.entity
 
 import jakarta.persistence.*
+import org.besl.uin_cheker.model.HistoryDto
 import org.hibernate.annotations.CreationTimestamp
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import java.io.Serializable
@@ -50,4 +51,11 @@ class RequestUinHistory (
     }
 
     enum class RequestStatus { SUCCESS, ERROR, PENDING }
+
+    fun toDto() = HistoryDto(
+        uin = this.uin,
+        timestamp = this.requestDate,
+        status = this.status.toString(),
+        typeClient = this.source,
+    )
 }
