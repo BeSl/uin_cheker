@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import kotlin.time.Duration
 
 @Entity
-@EnableJpaRepositories
+//@EnableJpaRepositories
 @Table(name = "request_history")
 class RequestUinHistory (
     @Id

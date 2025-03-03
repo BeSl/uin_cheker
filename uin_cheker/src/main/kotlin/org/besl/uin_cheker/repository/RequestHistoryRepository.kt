@@ -22,7 +22,7 @@ public interface RequestHistoryRepository : JpaRepository <RequestUinHistory?, L
     fun findByUin(uin: String): List<RequestUinHistory>
 
     @Query("""
-        SELECT h FROM request_history h
+        SELECT h FROM RequestUinHistory h
         WHERE (:uin IS NULL OR h.uin = :uin)
         AND (:typeClient IS NULL OR h.source = :typeClient) 
     """)
