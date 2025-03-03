@@ -1,4 +1,4 @@
-package org.besl.uin_cheker.model
+package org.besl.uin_cheker.dto.response
 
 import java.time.LocalDateTime
 

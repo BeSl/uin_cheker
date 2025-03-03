@@ -1,11 +1,11 @@
-package org.besl.uin_cheker.controller
+package org.besl.uin_cheker.controller.api.v1
 
-import org.besl.uin_cheker.model.*
+import org.besl.uin_cheker.dto.request.CaptchaRequest
 import org.besl.uin_cheker.service.*
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/captcha")
 class CaptchaController (
     private val captchaService: CaptchaService
 ){

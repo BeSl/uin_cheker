@@ -1,10 +1,8 @@
 package org.besl.uin_cheker.entity
 
 import jakarta.persistence.*
-import org.besl.uin_cheker.model.HistoryDto
+import org.besl.uin_cheker.dto.response.HistoryDto
 import org.hibernate.annotations.CreationTimestamp
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
-import java.io.Serializable
 import java.time.LocalDateTime
 import kotlin.time.Duration
 
