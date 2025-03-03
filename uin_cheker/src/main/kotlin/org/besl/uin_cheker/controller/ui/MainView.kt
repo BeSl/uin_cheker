@@ -2,7 +2,6 @@ package org.besl.uin_cheker.controller.ui
 
 import JewelryCheckResponse
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.H1
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -10,7 +9,6 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import org.besl.uin_cheker.service.ProbPalataService
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.applayout.DrawerToggle
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -19,8 +17,11 @@ import com.vaadin.flow.component.orderedlayout.Scroller
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.sidenav.SideNavItem;
+import com.vaadin.flow.component.dialog.Dialog;
+
+import com.vaadin.flow.component.html.*
 import com.vaadin.flow.data.value.ValueChangeMode
-import org.besl.uin_cheker.repository.RequestHistoryRepository
+
 import com.vaadin.flow.theme.lumo.LumoUtility
 import org.besl.uin_cheker.model.HistoryDto
 import org.besl.uin_cheker.service.HistoryService
@@ -203,7 +204,12 @@ class HistoryView(
             configureFilters()
             configureGrid()
             add(createToolbar(), grid)
-
+            grid.addItemClickListener { event ->
+                event.item.let {
+//                    dialog.openDetails(it)
+//                    dialog.open()
+                }
+            }
         }
 
         add(formLayout)
@@ -259,5 +265,51 @@ class HistoryView(
                 typeClient = typeFilter.value.takeIf { it.isNotBlank() }
             )
         )
+    }
+}
+private class HistoryDetailDialog : Dialog() {
+    private val content = VerticalLayout()
+
+    init {
+        isModal = true
+        isDraggable = true
+        isResizable = true
+        add(content)
+    }
+
+    fun openDetails(item: HistoryDto) {
+        removeAll()
+        content.add(
+            H3("Details for request #${item.uin}"),
+            Div().apply {
+                addClassName("detail-section")
+                add(
+                    item.uin?.let { createDetailItem("UIN:", it) },
+//                    createDetailItem("Type:", item.requestType),
+//                    createDetailItem("User ID:", item.userId.toString()),
+                    createDetailItem("Timestamp:",
+                        item.timestamp.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                )
+            },
+            HorizontalLayout().apply {
+                add(
+                    Button("Close") { close() },
+                    Button("Export PDF", VaadinIcon.FILE.create()) {
+                        // Логика экспорта
+                    }
+                )
+//                spacing = true
+            }
+        )
+    }
+
+    private fun createDetailItem(label: String, value: String): HorizontalLayout {
+        return HorizontalLayout(
+            Span(label).apply { addClassName("detail-label") },
+            Span(value).apply { addClassName("detail-value") }
+        ).apply {
+//            spacing = true
+            setAlignItems(FlexComponent.Alignment.BASELINE)
+        }
     }
 }

@@ -23,7 +23,7 @@ public interface RequestHistoryRepository : JpaRepository <RequestUinHistory?, L
 
     @Query("""
         SELECT h FROM RequestUinHistory h
-        WHERE (:uin IS NULL OR h.uin = :uin)
+        WHERE (:uin IS NULL OR h.uin LIKE %:uin%)
         AND (:typeClient IS NULL OR h.source = :typeClient) 
     """)
     fun findFiltered(
