@@ -1,0 +1,7 @@
+services:
+  uin_cheker:
+    image: uin_cheker:latest
+    build: .
+    restart: "no"
+    ports:
+      - "8080:8080"

@@ -38,6 +38,11 @@ dependencies {
 	implementation("org.jsoup:jsoup:1.13.1")
 	implementation("com.vaadin:vaadin-spring-boot-starter")
 //	implementation("org.vaadin.lineawesome")
+    runtimeOnly("com.h2database:h2")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+	implementation("org.slf4j:slf4j-api")
+	runtimeOnly("ch.qos.logback:logback-classic")
 }
 
 dependencyManagement {
