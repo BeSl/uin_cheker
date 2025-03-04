@@ -51,6 +51,7 @@ class MainLayout : AppLayout() {
         return SideNav().apply {
             addItem(
                 SideNavItem("Поиск УИН","/checker", VaadinIcon.CHECK.create()),
+                SideNavItem("Коллекция уин", "/jewelrylist", VaadinIcon.ARROWS.create()),
                 SideNavItem("История проверок", "/history", VaadinIcon.FILE_SEARCH.create())
             )
         }
