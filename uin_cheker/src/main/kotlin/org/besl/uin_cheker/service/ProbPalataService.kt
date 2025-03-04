@@ -6,6 +6,7 @@
     import com.fasterxml.jackson.databind.SerializationFeature
     import com.fasterxml.jackson.module.kotlin.KotlinModule
     import jakarta.transaction.Transactional
+    import org.besl.uin_cheker.entity.Contractor
     import org.besl.uin_cheker.entity.RequestUinHistory
     import org.besl.uin_cheker.integration.ProbPalataClient
     import org.besl.uin_cheker.repository.RequestHistoryRepository
@@ -21,7 +22,8 @@
     @Service
     class ProbPalataService(
         @Value("\${captcha.storage.path}") private val storagePath: String,
-        private val requestHistoryRepository: RequestHistoryRepository
+        private val requestHistoryRepository: RequestHistoryRepository,
+        private val jewelryService: JewelryService,
     ) {
 
         // Настроенный ObjectMapper
@@ -32,7 +34,7 @@
         }
 
         @Transactional
-        fun getAsyncStatus(uin: String, source: String = "WEB"): JewelryCheckResponse{
+        fun getAsyncStatus(uin: String, source: String = "WEB"): Pair<JewelryCheckResponse?, String?> {
 
             val history = requestHistoryRepository.save(
                 RequestUinHistory(
@@ -60,14 +62,14 @@
                     status = RequestUinHistory.RequestStatus.SUCCESS
                     responseData = objectMapper.writeValueAsString(res)
                 }.let { requestHistoryRepository.save(it) }
-
-                return res
+                jewelryService.saveJewelryCheckResponse(res)
+                return Pair(res, null)
             } catch (e: Exception) {
                 history.apply {
                     status = RequestUinHistory.RequestStatus.ERROR
                     responseData = e.message
                 }.let { requestHistoryRepository.save(it) }
-                throw e
+                return Pair(null, e.message)
             }
         }
 
@@ -84,7 +86,9 @@
             return "${dateTimeString}_$uuid"
         }
 
+
     }
+
 
     data class ExternalServiceResponse(
         val status: String

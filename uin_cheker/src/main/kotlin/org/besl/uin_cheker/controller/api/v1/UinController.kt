@@ -6,6 +6,7 @@ import org.besl.uin_cheker.dto.response.HistoryDto
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.besl.uin_cheker.service.*
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -23,13 +24,20 @@ class UinController (
     ): ResponseEntity<String> {
         return try {
             val status = probPalateClient.getAsyncStatus(uin, "REST")
-            val objectMapper = jacksonObjectMapper().apply {
-                setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            if (status.first!=null) {
+                val objectMapper = jacksonObjectMapper().apply {
+                    setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                }
+                val rs = objectMapper.writeValueAsString(status.first!!)
+                ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(rs)
             }
-            val rs = objectMapper.writeValueAsString(status)
-            ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(rs)
+            else{
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(status.second)
+            }
+
+
         } catch (e: Exception) {
             ResponseEntity.internalServerError().body("Error: ${e.message}")
         }

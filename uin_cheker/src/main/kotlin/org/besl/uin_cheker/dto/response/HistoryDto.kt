@@ -6,5 +6,7 @@ class HistoryDto(
     val uin: String?,
     val typeClient: String?,
     val timestamp: LocalDateTime,
-    val status:String
+    val statusRequest: String?,
+    val capthaText: String?,
+    val responseData: String?
 )

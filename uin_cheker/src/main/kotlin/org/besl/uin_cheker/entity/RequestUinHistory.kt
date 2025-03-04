@@ -26,7 +26,7 @@ class RequestUinHistory (
     var status: RequestStatus = RequestStatus.PENDING,
 
     @Column(columnDefinition = "TEXT")
-    var responseData: String? = null,
+    var responseData: String? = "",
 
     @Column(length = 50)
     var source: String = "WEB", // WEB или API
@@ -52,8 +52,10 @@ class RequestUinHistory (
 
     fun toDto() = HistoryDto(
         uin = this.uin,
-        timestamp = this.requestDate,
-        status = this.status.toString(),
         typeClient = this.source,
+        timestamp = this.requestDate,
+        statusRequest = this.status.toString(),
+        capthaText = this.captchaText,
+        responseData = this.responseData,
     )
 }

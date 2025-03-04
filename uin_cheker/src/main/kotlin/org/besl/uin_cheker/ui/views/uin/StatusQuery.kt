@@ -89,7 +89,10 @@ class StatusQuery(
 
                     try {
                         val response = jewelryService.getAsyncStatus(uinField.value, "WEB")
-                        showResult(response)
+                        if (response.first!=null)
+                            showResult(response.first!!)
+                        else
+                            Notification.show("Ошибка: ${response.second}", 5000, Notification.Position.BOTTOM_CENTER)
                     } catch (e: Exception) {
                         Notification.show("Ошибка: ${e.message}", 5000, Notification.Position.BOTTOM_CENTER)
                     } finally {
@@ -102,7 +105,7 @@ class StatusQuery(
         private fun showResult(response: JewelryCheckResponse) {
             statusField.value = response.status ?: "Не указано"
             nameField.value = response.description ?: "Не указано"
-            descriptionField.value = response.composition ?: "" + response.seller?.name ?: ""
+            descriptionField.value = response.composition ?: ("" + response.seller?.name) ?: ""
             seller_inn.value = response.seller.inn?:""
             seller_name.value = response.seller.name?:""
             seller_adress.value = response.seller.address?:""
