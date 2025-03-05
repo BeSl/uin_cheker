@@ -62,7 +62,7 @@
                     status = RequestUinHistory.RequestStatus.SUCCESS
                     responseData = objectMapper.writeValueAsString(res)
                 }.let { requestHistoryRepository.save(it) }
-                jewelryService.saveJewelryCheckResponse(res)
+                jewelryService.saveOrUpdateJewelryCheckResponse(res)
                 return Pair(res, null)
             } catch (e: Exception) {
                 history.apply {
