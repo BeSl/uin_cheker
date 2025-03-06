@@ -3,4 +3,4 @@ server:
 
 captcha:
   storage:
-    path: C:/captcha-storage
+    path: ./captcha_storage

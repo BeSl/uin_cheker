@@ -1,10 +1,8 @@
 package org.besl.uin_cheker.entity
 
 import jakarta.persistence.*
-import org.besl.uin_cheker.model.HistoryDto
+import org.besl.uin_cheker.dto.response.HistoryDto
 import org.hibernate.annotations.CreationTimestamp
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
-import java.io.Serializable
 import java.time.LocalDateTime
 import kotlin.time.Duration
 
@@ -28,7 +26,7 @@ class RequestUinHistory (
     var status: RequestStatus = RequestStatus.PENDING,
 
     @Column(columnDefinition = "TEXT")
-    var responseData: String? = null,
+    var responseData: String? = "",
 
     @Column(length = 50)
     var source: String = "WEB", // WEB или API
@@ -54,8 +52,10 @@ class RequestUinHistory (
 
     fun toDto() = HistoryDto(
         uin = this.uin,
-        timestamp = this.requestDate,
-        status = this.status.toString(),
         typeClient = this.source,
+        timestamp = this.requestDate,
+        statusRequest = this.status.toString(),
+        capthaText = this.captchaText,
+        responseData = this.responseData,
     )
 }
