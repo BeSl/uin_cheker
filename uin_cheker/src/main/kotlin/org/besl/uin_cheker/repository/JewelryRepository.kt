@@ -12,9 +12,9 @@ import org.springframework.data.jpa.domain.Specification
 
 
 interface JewelryRepository : JpaRepository<JewelryItem, String>, JpaSpecificationExecutor<JewelryItem> {
-    fun findByArticleNumber(articleNumber: String): JewelryItem?
-    fun findByShopAndIsSoldFalse(shop: Shop): List<JewelryItem>
-    fun findBySeller(seller: Contractor): List<JewelryItem>
+//    fun findByArticleNumber(articleNumber: String): JewelryItem?
+//    fun findByShopAndIsSoldFalse(shop: Shop): List<JewelryItem>
+//    fun findBySeller(seller: Contractor): List<JewelryItem>
 }
 
 @Component
@@ -42,7 +42,7 @@ class JewelryMapper {
         return Shop(address = address, contractor = seller)
     }
     private fun mapSold(status: String): Boolean{
-        return (status=="продано")
+        return (status=="Продано")
     }
 
 }

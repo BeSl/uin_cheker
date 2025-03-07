@@ -57,11 +57,6 @@ class JewelryService(
         return savedEntity
     }
 
-//    fun list(pageable: Pageable, filter: Specification<JewelryItem>?): Page<JewelryItem> {
-//        return filter?.let {
-//            jewelryRepository.findAll(it, pageable)
-//        } ?: jewelryRepository.findAll(pageable)
-//    }
 
     fun list(filter: Specification<JewelryItem>? = null, pageable: Pageable = Pageable.unpaged()): Page<JewelryItem> {
         return filter?.let {
