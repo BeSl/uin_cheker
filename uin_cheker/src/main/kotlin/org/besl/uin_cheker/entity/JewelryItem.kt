@@ -12,7 +12,7 @@ class JewelryItem(
     @Id
     @Column(unique = true, length = 16)
 //                     @Pattern(regexp = "^[A-Z0-9]{10,20}$") // Пример формата УИН
-    val uin: String,
+    open val uin: String,
 
     @NotBlank
     @Column(nullable = false, length = 500)
@@ -23,7 +23,7 @@ class JewelryItem(
     var articleNumber: String = "none",
 
     @Column(nullable = false)
-    var isSold: Boolean = false,
+   open var isSold: Boolean = false,
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "shop_id")

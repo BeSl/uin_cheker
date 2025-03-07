@@ -7,15 +7,19 @@ import org.besl.uin_cheker.repository.ContractorRepository
 import org.besl.uin_cheker.repository.JewelryMapper
 import org.besl.uin_cheker.repository.JewelryRepository
 import org.besl.uin_cheker.repository.ShopRepository
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Propagation
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer
 
 @Service
 class JewelryService(
     private val jewelryRepository: JewelryRepository,
     private val sellerRepository: ContractorRepository,
     private val mapper: JewelryMapper,
-    private val shopRepository: ShopRepository
+    private val shopRepository: ShopRepository,
+    private val pageable: PageableHandlerMethodArgumentResolverCustomizer
 ) {
     @Transactional
     fun saveOrUpdateJewelryCheckResponse(response: JewelryCheckResponse) {
@@ -52,13 +56,20 @@ class JewelryService(
         val savedEntity = jewelryRepository.save(updatedEntity)
         return savedEntity
     }
-//        // Convert DTO to Entity
-//        val entity = mapper.toEntity(response)
-//
-//        // Save related entities first
-//        sellerRepository.save(entity.seller!!)
-//        shopRepository.save(entity.shop)
-//        // Save main entity
-//        jewelryRepository.saveAndFlush(entity)
+
+//    fun list(pageable: Pageable, filter: Specification<JewelryItem>?): Page<JewelryItem> {
+//        return filter?.let {
+//            jewelryRepository.findAll(it, pageable)
+//        } ?: jewelryRepository.findAll(pageable)
 //    }
+
+    fun list(filter: Specification<JewelryItem>? = null, pageable: Pageable = Pageable.unpaged()): Page<JewelryItem> {
+        return filter?.let {
+            jewelryRepository.findAll(it, pageable)
+        } ?: jewelryRepository.findAll(pageable)
+    }
+
+    fun count(): Long {
+        return jewelryRepository.count()
+    }
 }
