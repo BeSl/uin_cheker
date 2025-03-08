@@ -1,5 +1,5 @@
 # Сборка приложения
-FROM eclipse-temurin:21-jdk-alpine-3.21 as builder
+FROM eclipse-temurin:21-jdk-jammy as builder
 
 # Установка системных зависимостей для Tesseract и OpenCV
 RUN apt-get update && apt-get install -y \
@@ -14,7 +14,7 @@ COPY . .
 RUN ./gradlew bootJar
 
 # Финальный образ
-FROM eclipse-temurin:21-jdk-alpine-3.21
+FROM eclipse-temurin:21-jdk-jammy
 
 WORKDIR /app
 
