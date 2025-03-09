@@ -25,14 +25,14 @@ CREATE TABLE request_history
     uin            VARCHAR(16)                             NOT NULL,
     request_date   TIMESTAMP                               NOT NULL,
     status         VARCHAR(255)                            NOT NULL,
-    response_data  CLOB,
+    response_data  text,
     source         VARCHAR(50),
-    request_data   VARCHAR(16)                             NOT NULL,
+    request_data   text                             NOT NULL,
     timestamp      TIMESTAMP                               NOT NULL,
     failed_checked BOOLEAN                                 NOT NULL,
     duration       BIGINT                                  NOT NULL,
-    captcha_path   VARCHAR(16),
-    captcha_text   VARCHAR(16),
+    captcha_path   text,
+    captcha_text   text,
     CONSTRAINT pk_request_history PRIMARY KEY (id)
 );
 
