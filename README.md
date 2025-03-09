@@ -8,7 +8,17 @@
 
 ### Веб-интерфейс
 
-![UI](img/ui.png)
+### Проверка уина 
+
+![UI](img/ui_check.png)
+
+### коллекция проверенных 
+
+![UI](img/ui_list_cat.png)
+
+### История запросов
+
+![UI](img/ui_list_hist.png)
 
 
 ### Rest-API

@@ -6,12 +6,15 @@ import org.besl.uin_cheker.entity.Contractor
 import org.besl.uin_cheker.entity.JewelryItem
 import org.besl.uin_cheker.entity.Shop
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.stereotype.Component
+import org.springframework.data.jpa.domain.Specification
 
-interface JewelryRepository : JpaRepository<JewelryItem, String> {
-    fun findByArticleNumber(articleNumber: String): JewelryItem?
-    fun findByShopAndIsSoldFalse(shop: Shop): List<JewelryItem>
-    fun findBySeller(seller: Contractor): List<JewelryItem>
+
+interface JewelryRepository : JpaRepository<JewelryItem, String>, JpaSpecificationExecutor<JewelryItem> {
+//    fun findByArticleNumber(articleNumber: String): JewelryItem?
+//    fun findByShopAndIsSoldFalse(shop: Shop): List<JewelryItem>
+//    fun findBySeller(seller: Contractor): List<JewelryItem>
 }
 
 @Component
@@ -39,7 +42,7 @@ class JewelryMapper {
         return Shop(address = address, contractor = seller)
     }
     private fun mapSold(status: String): Boolean{
-        return (status=="продано")
+        return (status=="Продано")
     }
 
 }

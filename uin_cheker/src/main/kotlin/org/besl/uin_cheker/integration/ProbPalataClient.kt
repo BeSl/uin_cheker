@@ -11,7 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import org.springframework.web.reactive.function.BodyInserters
 
-//@Suppress("NAME_SHADOWING")
 class ProbPalataClient {
     val baseUrl = """https://probpalata.gov.ru"""
     val url_captcha = """/captcha/"""

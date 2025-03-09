@@ -25,22 +25,22 @@ class RequestUinHistory (
     @Column(nullable = false)
     var status: RequestStatus = RequestStatus.PENDING,
 
-    @Column(columnDefinition = "TEXT")
+    @Column()
     var responseData: String? = "",
 
     @Column(length = 50)
     var source: String = "WEB", // WEB или API
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false)
     val requestData: String="",
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false)
     val timestamp: LocalDateTime = LocalDateTime.now(),
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false)
     val failedChecked: Boolean = false,
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false)
     val duration: Duration = Duration.ZERO,
-    @Column(nullable = true, length = 16)
+    @Column(nullable = true)
     var captchaPath: String? = null,
-    @Column(nullable = true, length = 16)
+    @Column(nullable = true)
     var captchaText: String? = null
 
 ) {

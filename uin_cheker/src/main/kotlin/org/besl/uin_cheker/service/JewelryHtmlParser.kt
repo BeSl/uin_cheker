@@ -34,16 +34,25 @@ class JewelryHtmlParser {
     }
 
     private fun extractMainUin(doc: Document): String {
-        return doc.selectFirst("div.check-result-row:has(p.check-result-row__label:contains(УИН комплекта))")
+        val fn = doc.selectFirst("div.check-result-row:has(p.check-result-row__label:contains(УИН комплекта))")
             ?.selectFirst("p.check-result-row__value")
             ?.text()
-            ?.replace(" ", "") ?: throw ParseException("Main UIN not found")
+            ?.replace(" ", "") //? :
+
+        if (fn != null) {
+            return fn
+        }else{
+            return doc.selectFirst("div.check-result-row:has(p.check-result-row__label:contains(УИН))")
+                        ?.selectFirst("p.check-result-row__value")
+                            ?.text()
+                                ?.replace(" ", "") ?:throw ParseException("Parse UIN error")
+        }
     }
 
     private fun extractValue(doc: Document, label: String): String {
         return doc.selectFirst("div.check-result-row:has(p.check-result-row__label:contains($label))")
             ?.selectFirst("p.check-result-row__value")
-            ?.text() ?: throw ParseException("$label not found")
+            ?.text() ?: ""
     }
 
     private fun extractValueOrNull(doc: Document, label: String): String? {

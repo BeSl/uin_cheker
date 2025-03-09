@@ -15,11 +15,11 @@ import java.time.LocalDateTime
 @Repository
 public interface RequestHistoryRepository : JpaRepository <RequestUinHistory?, Long?> {
     // Для поиска по UIN с пагинацией
-    fun findByUin(uin: String, pageable: Pageable): Page<RequestUinHistory>
+//    fun findByUin(uin: String, pageable: Pageable): Page<RequestUinHistory>
 
     // Для поиска всех записей с сортировкой по дате
-    fun findAllByOrderByRequestDateDesc(pageable: Pageable): Page<RequestUinHistory>
-    fun findByUin(uin: String): List<RequestUinHistory>
+//    fun findAllByOrderByRequestDateDesc(pageable: Pageable): Page<RequestUinHistory>
+//    fun findByUin(uin: String): List<RequestUinHistory>
 
     @Query("""
         SELECT h FROM RequestUinHistory h

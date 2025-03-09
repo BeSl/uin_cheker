@@ -50,9 +50,9 @@ class MainLayout : AppLayout() {
     private fun createSideNav(): SideNav  {
         return SideNav().apply {
             addItem(
-                SideNavItem("Поиск УИН","/checker", VaadinIcon.CHECK.create()),
-                SideNavItem("Коллекция уин", "/jewelrylist", VaadinIcon.ARROWS.create()),
-                SideNavItem("История проверок", "/history", VaadinIcon.FILE_SEARCH.create())
+                SideNavItem("Поиск УИН","/checker", VaadinIcon.FILE_SEARCH.create()),
+                SideNavItem("Коллекция уин", "/jewelrylist", VaadinIcon.ADD_DOCK.create()),
+                SideNavItem("История проверок", "/history", VaadinIcon.BOOK.create())
             )
         }
     }

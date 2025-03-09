@@ -1,7 +1,34 @@
+version: '3.8'
+
 services:
-  uin_cheker:
-    image: uin_cheker:latest
-    build: .
-    restart: "no"
+  postgresdb:
+    image: postgres
+    # build: ./postgres
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=$POSTGRESDB_USER
+      - POSTGRES_PASSWORD=$POSTGRESDB_ROOT_PASSWORD
+      - POSTGRES_DB=$POSTGRESDB_DATABASE
     ports:
-      - "8080:8080"
+      - $POSTGRESDB_LOCAL_PORT:$POSTGRESDB_DOCKER_PORT
+    volumes:
+      - ./db:/var/lib/postgres
+      - ./initdb:/docker-entrypoint-initdb.d
+
+  app:
+   build: .
+   env_file: ./.env
+   ports:
+     - "8080:8080"
+   environment:
+     - SPRING_DATASOURCE_URL=jdbc:postgresql://db:$POSTGRESDB_DOCKER_PORT/$POSTGRESDB_DATABASE
+     - SPRING_DATASOURCE_USERNAME=$POSTGRESDB_USER
+     - SPRING_DATASOURCE_PASSWORD=$POSTGRESDB_ROOT_PASSWORD # должно совпадать с POSTGRES_PASSWORD
+     - SPRING_LIQUIBASE_USER=$POSTGRESDB_USER
+     - SPRING_LIQUIBASE_PASSWORD=$POSTGRESDB_ROOT_PASSWORD
+   depends_on:
+     postgresdb:
+       condition: service_started
+   volumes:
+     - ./tessdata:/usr/share/tesseract-ocr/4.00/tessdata  # если используете кастомные trained data
