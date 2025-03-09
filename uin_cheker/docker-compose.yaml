@@ -1,40 +1,33 @@
 version: '3.8'
 
 services:
+  postgresdb:
+    image: postgres
+    # build: ./postgres
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=$POSTGRESDB_USER
+      - POSTGRES_PASSWORD=$POSTGRESDB_ROOT_PASSWORD
+      - POSTGRES_DB=$POSTGRESDB_DATABASE
+    ports:
+      - $POSTGRESDB_LOCAL_PORT:$POSTGRESDB_DOCKER_PORT
+    volumes:
+      - ./db:/var/lib/postgres
+      - ./initdb:/docker-entrypoint-initdb.d
+
   app:
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/uin_checker
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres # должно совпадать с POSTGRES_PASSWORD
-      - SPRING_LIQUIBASE_USER=postgres
-      - SPRING_LIQUIBASE_PASSWORD=postgres
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - ./tessdata:/usr/share/tesseract-ocr/4.00/tessdata  # если используете кастомные trained data
-
-  db:
-    image: postgres:16.3
-    restart: "no"
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./initdb:/docker-entrypoint-initdb.d:ro
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: uin_checker
-    healthcheck:
-      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
-      interval: 10s
-      timeout: 5s
-      start_period: 10s
-      retries: 5
-
-volumes:
-  postgres_data:
+   build: .
+   ports:
+     - "8080:8080"
+   environment:
+     - SPRING_DATASOURCE_URL=jdbc:postgresql://db:$POSTGRESDB_DOCKER_PORT/$POSTGRESDB_DATABASE
+     - SPRING_DATASOURCE_USERNAME=$POSTGRESDB_USER
+     - SPRING_DATASOURCE_PASSWORD=$POSTGRESDB_ROOT_PASSWORD # должно совпадать с POSTGRES_PASSWORD
+     - SPRING_LIQUIBASE_USER=$POSTGRESDB_USER
+     - SPRING_LIQUIBASE_PASSWORD=$POSTGRESDB_ROOT_PASSWORD
+   depends_on:
+     postgresdb:
+       condition: service_started
+   volumes:
+     - ./tessdata:/usr/share/tesseract-ocr/4.00/tessdata  # если используете кастомные trained data

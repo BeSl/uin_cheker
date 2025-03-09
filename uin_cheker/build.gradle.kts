@@ -27,21 +27,19 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("net.sourceforge.tess4j:tess4j:4.5.3")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
 	implementation(files("\\opencv\\opencv-4100.jar"))
 	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 	implementation("org.jsoup:jsoup:1.13.1")
-	implementation ("org.liquibase:liquibase-core")
 	implementation("com.vaadin:vaadin-spring-boot-starter")
-//	implementation("org.vaadin.lineawesome")
-    runtimeOnly("com.h2database:h2")
+//    runtimeOnly("com.h2database:h2")
+//	runtimeOnly ('org.postgresql:postgresql')
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.slf4j:slf4j-api")
-	runtimeOnly("ch.qos.logback:logback-classic")
 }
 
 dependencyManagement {
